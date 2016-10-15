@@ -1,12 +1,13 @@
 {
   "root": {
-    "port": 2358
+    "port": 8080
   },
   "rpc": {
     "host": "localhost",
     "port": 8545
   },
   "key": {
-    "nBytes": 32
+    "nBytes": 32,
+    "path": "key"
   }
 }
