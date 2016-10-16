@@ -18,8 +18,14 @@ func main() {
   fmt.Println(fmt.Sprintf("Communicating with RPC %s:%d", rpcHost, rpcPort))
 
   // Setup the server
-  fmt.Println(fmt.Sprintf("Server listening on port %d", viper.GetInt("root.port")))
-  server()
+  // fmt.Println(fmt.Sprintf("Server listening on port %d", viper.GetInt("root.port")))
+  // server()
+
+  // err = createKey()
+  // if (err != nil) { log.Fatal(err) }
+  priv, err := keyFromFile()
+  privateToAddress(priv)
+
 }
 
 func loadConfig() {

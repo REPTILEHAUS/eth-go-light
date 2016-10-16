@@ -6,9 +6,14 @@ package main;
 
 import (
     "crypto/rand"
+    // "crypto/ecdsa"
     "encoding/hex"
     "github.com/spf13/viper"
     "io/ioutil"
+    "fmt"
+    // "log"
+    secp256k1 "github.com/haltingstate/secp256k1-go"
+    "github.com/ebfe/keccak"
 )
 
 /**
@@ -72,4 +77,40 @@ func generateRandomBytes(n int) ([]byte, error) {
   _, err := rand.Read(b)
   if (err != nil) { return nil, err }
   return b, nil
+}
+
+/**
+ * Convert a private key to an Ethereum address
+ * @param  {buffer} privateKey - A buffered 32-byte private key
+ * @return {string}            - The Ethereum address
+ */
+func privateToAddress(priv []byte) (string){
+  // Recover the public key from private key using
+  // bitcoin secp256k1 function
+  pub := privateToPublic(priv)
+  // Generate a new keccak256 hash object
+  h := keccak.New256()
+  // Add the public key to the has object
+  // NOTE: we remove the first byte (for some reason)
+  h.Write(pub[1:])
+  hash := h.Sum(nil)
+  // Encode the hash object to hex string
+  // NOTE: we remove the first 12 bytes (again, for some reason)
+  hashHex := hex.EncodeToString(hash[12:32])
+
+  return hashHex
+};
+
+/**
+* Returns the ethereum public key of a given private key
+* @method privateToPublic
+* @param {[]byte} privateKey A private key must be 256 bits (32 bytes) wide
+* @return {[]byte}
+*/
+func privateToPublic(priv []byte) ([]byte){
+  // Using the Bitcoin secp256k1 library, get a public key from
+  // our private key.
+  // NOTE: This is the uncomressed (65 byte) version of the key
+  pub := secp256k1.UncompressedPubkeyFromSeckey(priv)
+  return pub
 }

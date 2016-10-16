@@ -12,18 +12,13 @@ import (
 
 /**
  * Handle setup route
+ * 1: Create a private key and save it to disk
  */
 func setupHandler(w http.ResponseWriter, r *http.Request) {
-  fmt.Fprintf(w, "hello world")
   // Create a private key and save to disk
   err := createKey()
   if (err != nil) { log.Fatal(err) }
-
-  // Test: grab private key and print string
-  
 }
-
-
 
 /**
  * Initialize the http server and listen on configured port
